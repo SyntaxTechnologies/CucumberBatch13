@@ -15,7 +15,7 @@ public class HardCodedExamples {
 
     String baseURI = RestAssured.baseURI = "http://hrm.syntaxtechs.net/syntaxapi/api";
     //CRUD operations we perform
-    String token = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NjQzMjI4ODMsImlzcyI6ImxvY2FsaG9zdCIsImV4cCI6MTY2NDM2NjA4MywidXNlcklkIjoiNDM2NiJ9.DZSBsuigL9XpDfqlhbusLrC9Q2w8g0egtOM4P_QbHH0";
+    String token = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NjQ0MDc2NDIsImlzcyI6ImxvY2FsaG9zdCIsImV4cCI6MTY2NDQ1MDg0MiwidXNlcklkIjoiNDM2NiJ9.VCQ7RZvnkj8Ht-OcQFNvgi-xpzqbk_wgFzBOaaiUL7M";
     static String employee_id;
 
     @Test
@@ -85,6 +85,26 @@ public class HardCodedExamples {
 
         Response response = preparedRequest.when().put("/updateEmployee.php");
         response.then().assertThat().statusCode(200);
+    }
+
+    @Test
+    public void dGetUpdatedEmployee(){
+        //prepare the request
+        RequestSpecification preparedRequest = given().
+                header("Content-Type", "application/json")
+                .header("Authorization", token).
+                queryParam("employee_id", employee_id);
+
+        //hitting the endpoint
+
+        Response response = preparedRequest.when().get("/getOneEmployee.php");
+
+        response.prettyPrint();
+
+        response.then().assertThat().statusCode(200);
+
+       response.then().assertThat().
+               body("employee.emp_lastname", equalTo("zee"));
     }
 
 }
