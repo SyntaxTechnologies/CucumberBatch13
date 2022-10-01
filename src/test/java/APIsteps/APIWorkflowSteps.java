@@ -95,4 +95,24 @@ public class APIWorkflowSteps {
             }
         }
     }
+
+    @Given("a request is prepared for creating an employee via json payload")
+    public void a_request_is_prepared_for_creating_an_employee_via_json_payload() {
+        request = given().header(APIConstants.HEADER_CONTENT_TYPE, APIConstants.CONTENT_TYPE_VALUE).
+                header(APIConstants.HEADER_AUTHORIZATION, GenerateTokenSteps.token).
+                body(APIPayloadConstants.createEmployeePayloadJson());
+    }
+
+    @Given("a request is prepared for creating an employee via more dynamic payload {string} , {string} , {string} , {string} , {string} , {string} , {string}")
+    public void a_request_is_prepared_for_creating_an_employee_via_more_dynamic_payload
+            (String firstName, String lastName, String middleName,
+             String gender, String birthday,
+             String empStatus, String jobTitle) {
+
+        request = given().header(APIConstants.HEADER_CONTENT_TYPE, APIConstants.CONTENT_TYPE_VALUE).
+                header(APIConstants.HEADER_AUTHORIZATION, GenerateTokenSteps.token).
+                body(APIPayloadConstants.createDynamicEmployeePayloadJson
+                        (firstName, lastName, middleName, gender,
+                                birthday, empStatus, jobTitle));
+    }
 }
