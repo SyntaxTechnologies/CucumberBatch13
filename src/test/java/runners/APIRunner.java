@@ -20,7 +20,7 @@ import org.junit.runner.RunWith;
         //irrelevant or unreadable character in it
         //recommended is, set it to true always
         monochrome = true,
-        tags = "@dynamic",
+        tags = "@update",
         //when you use pretty keyword under plugins, it shows all the steps which you
         //executed in console
         plugin = {"pretty"}
@@ -29,4 +29,5 @@ import org.junit.runner.RunWith;
 )
 
 public class APIRunner {
+
 }

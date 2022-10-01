@@ -115,4 +115,17 @@ public class APIWorkflowSteps {
                         (firstName, lastName, middleName, gender,
                                 birthday, empStatus, jobTitle));
     }
+
+    @Given("a request is prepared for updating an employee")
+    public void a_request_is_prepared_for_updating_an_employee() {
+        request = given().header(APIConstants.HEADER_CONTENT_TYPE, APIConstants.CONTENT_TYPE_VALUE).
+                header(APIConstants.HEADER_AUTHORIZATION, GenerateTokenSteps.token).
+                body(APIPayloadConstants.updateEmployeePayload());
+    }
+
+    @When("a PUT call is made to update the employee")
+    public void a_put_call_is_made_to_update_the_employee() {
+       response = request.when().put(APIConstants.UPDATE_EMPLOYEE_URI);
+    }
+
 }

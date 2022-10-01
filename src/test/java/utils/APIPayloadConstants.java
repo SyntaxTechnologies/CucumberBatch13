@@ -1,5 +1,6 @@
 package utils;
 
+import APIsteps.APIWorkflowSteps;
 import org.json.JSONObject;
 
 public class APIPayloadConstants {
@@ -41,6 +42,19 @@ public class APIPayloadConstants {
         obj.put("emp_birthday", birthDay);
         obj.put("emp_status", empStatus);
         obj.put("emp_job_title", jobTitle);
+        return obj.toString();
+    }
+
+    public static String updateEmployeePayload(){
+        JSONObject obj = new JSONObject();
+        obj.put("employee_id", APIWorkflowSteps.employee_id);
+        obj.put("emp_firstname", "naveed");
+        obj.put("emp_lastname", "noorzai");
+        obj.put("emp_middle_name", "sms");
+        obj.put("emp_gender", "M");
+        obj.put("emp_birthday", "2022-08-12");
+        obj.put("emp_status", "special employee");
+        obj.put("emp_job_title", "QA Lead");
         return obj.toString();
     }
 }
