@@ -5,8 +5,13 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import org.junit.Assert;
 import utils.APIConstants;
 import utils.APIPayloadConstants;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
@@ -46,4 +51,48 @@ public class APIWorkflowSteps {
         System.out.println(employee_id);
     }
 
+    @Given("a request is prepared to get the created employee")
+    public void a_request_is_prepared_to_get_the_created_employee() {
+        request = given().header(APIConstants.HEADER_CONTENT_TYPE, APIConstants.CONTENT_TYPE_VALUE).
+                header(APIConstants.HEADER_AUTHORIZATION, GenerateTokenSteps.token).
+                queryParam("employee_id", employee_id);
+    }
+
+    @When("a GET call is made to get the details of the employee")
+    public void a_get_call_is_made_to_get_the_details_of_the_employee() {
+        response = request.when().get(APIConstants.GET_ONE_EMPLOYEE_URI);
+    }
+    @Then("the status code is {int}")
+    public void the_status_code_is(int statusCode) {
+        response.then().assertThat().statusCode(statusCode);
+    }
+
+    @Then("the employee id {string} must match with globally stored employee id")
+    public void the_employee_id_must_match_with_globally_stored_employee_id(String employeeID) {
+      String tempEmployeeId =  response.jsonPath().getString(employeeID);
+      Assert.assertEquals(tempEmployeeId, employee_id);
+    }
+
+    @Then("the received data from {string} object matches with the data used to create employee")
+    public void the_received_data_from_object_matches_with_the_data_used_to_create_employee(String empObject, io.cucumber.datatable.DataTable dataTable) {
+        List<Map<String, String>> expectedData = dataTable.asMaps();
+        Map<String,String> actualData = response.body().jsonPath().get(empObject);
+
+        for (Map<String, String> map :expectedData
+             ) {
+            //to get all the keys, we use below line snippet
+            Set<String> keys =  map.keySet();
+           //bcz set doesn't allow duplicate values
+            //we are using another for each loop to get keys one by one
+            for (String key:
+                 keys) {
+                //it will return the value against the key
+              String expectedValue =  map.get(key);
+
+              //it will return the value from the response keys
+              String actualValue = actualData.get(key);
+              Assert.assertEquals(expectedValue, actualValue);
+            }
+        }
+    }
 }
